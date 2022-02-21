@@ -1,23 +1,45 @@
-import './App.css';
+import './styles/App.css';
 import { useState } from 'react';
+import PostList from './components/PostList';
+import MyButton from './components/UI/button/MyButton';
+import MyInput from './components/UI/input/MyInput';
 
 function App() {
-  const [likes, setLikes] = useState(0);
+  const [posts, setPosts] = useState([
+    { id: 1, title: 'Заголовок 1', body: 'lorem lorem lorem1' },
+    { id: 2, title: 'Заголовок 2', body: 'lorem lorem lorem2' },
+    { id: 3, title: 'Заголовок 3', body: 'lorem lorem lorem3' },
+  ]);
 
-  const increment = () => {
-    setLikes(likes + 1);
-  };
+  const [post, setPost] = useState({ title: '', body: '' });
 
-  const decrement = () => {
-    setLikes(likes - 1);
+  const addNewPost = (e) => {
+    e.preventDefault();
+    setPosts([...posts, { ...post, id: Date.now() }]);
+    setPost({ title: '', body: '' });
   };
 
   return (
     <div className="App">
-      <button onClick={() => decrement()}>Decrement</button>
-      <button onClick={() => increment()}>Increment</button>
+      <form>
+        {/*  Управляемый компонент */}
+        <MyInput
+          type="text"
+          placeholder="Название поста"
+          value={post.title}
+          onChange={(e) => setPost({ ...post, title: e.target.value })}
+        />
+        {/*  Неуправляемый компонент */}
+        <MyInput
+          type="text"
+          placeholder="Описание поста"
+          value={post.body}
+          onChange={(e) => setPost({ ...post, body: e.target.value })}
+        />
 
-      <h2>{likes}</h2>
+        <MyButton onClick={addNewPost}>Создать пост</MyButton>
+      </form>
+      <PostList posts={posts} title="Посты про JS1" />
     </div>
   );
 }

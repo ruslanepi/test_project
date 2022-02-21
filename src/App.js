@@ -1,8 +1,7 @@
 import './styles/App.css';
 import { useState } from 'react';
 import PostList from './components/PostList';
-import MyButton from './components/UI/button/MyButton';
-import MyInput from './components/UI/input/MyInput';
+import PostForm from './components/PostForm';
 
 function App() {
   const [posts, setPosts] = useState([
@@ -11,35 +10,18 @@ function App() {
     { id: 3, title: 'Заголовок 3', body: 'lorem lorem lorem3' },
   ]);
 
-  const [post, setPost] = useState({ title: '', body: '' });
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost]);
+  };
 
-  const addNewPost = (e) => {
-    e.preventDefault();
-    setPosts([...posts, { ...post, id: Date.now() }]);
-    setPost({ title: '', body: '' });
+  const removePost = (id) => {
+    setPosts(posts.filter((p) => p.id != id));
   };
 
   return (
     <div className="App">
-      <form>
-        {/*  Управляемый компонент */}
-        <MyInput
-          type="text"
-          placeholder="Название поста"
-          value={post.title}
-          onChange={(e) => setPost({ ...post, title: e.target.value })}
-        />
-        {/*  Неуправляемый компонент */}
-        <MyInput
-          type="text"
-          placeholder="Описание поста"
-          value={post.body}
-          onChange={(e) => setPost({ ...post, body: e.target.value })}
-        />
-
-        <MyButton onClick={addNewPost}>Создать пост</MyButton>
-      </form>
-      <PostList posts={posts} title="Посты про JS1" />
+      <PostForm create={createPost} />
+      <PostList remove={removePost} posts={posts} title="Посты про JS1" />
     </div>
   );
 }

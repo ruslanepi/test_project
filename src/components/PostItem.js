@@ -1,4 +1,6 @@
-const PostItem = ({ number, post }) => {
+import MyButton from './UI/button/MyButton';
+
+const PostItem = ({ number, post, remove }) => {
   const { id, title, body } = post;
 
   return (
@@ -11,7 +13,7 @@ const PostItem = ({ number, post }) => {
         <div>{body}</div>
       </div>
       <div className="post__btns">
-        <button>Удалить</button>
+        <MyButton onClick={() => remove(id)}>Удалить</MyButton>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import './styles/App.css'
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import PostList from './components/PostList'
 import PostForm from './components/PostForm'
 import PostFilter from './components/PostFilter'
 import MyModal from './components/UI/modal/MyModal'
 import MyButton from './components/UI/button/MyButton'
+import { usePosts } from './hooks/usePosts'
 
 function App() {
   const [posts, setPosts] = useState([
@@ -14,26 +15,8 @@ function App() {
   ])
 
   const [filter, setFilter] = useState({ sort: '', query: '' })
-
   const [modal, setModal] = useState(false)
-
-  //сортировка (usememo отрабатывает только в тех случаях, если изменились зависимости)
-  const sortedPosts = useMemo(() => {
-    console.log('Функция отработала')
-    if (filter.sort) {
-      return [...posts].sort((a, b) =>
-        a[filter.sort].localeCompare(b[filter.sort])
-      )
-    }
-    return posts
-  }, [filter.sort, posts])
-
-  //поиск (мы прокидываем наши данные через все  сортировки и фильтрации и только потом рендерим)
-  const sortedAndSearchedPosts = useMemo(() => {
-    return sortedPosts.filter((post) =>
-      post.title.toLowerCase().includes(filter.query)
-    )
-  }, [filter.query, sortedPosts])
+  const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
 
   //Создание поста
   const createPost = (newPost) => {
@@ -43,7 +26,7 @@ function App() {
 
   //удаление поста
   const removePost = (id) => {
-    setPosts(posts.filter((p) => p.id != id))
+    setPosts(posts.filter((p) => p.id !== id))
   }
 
   return (

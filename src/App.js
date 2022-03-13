@@ -2,8 +2,9 @@ import './styles/App.css'
 import { useState, useMemo } from 'react'
 import PostList from './components/PostList'
 import PostForm from './components/PostForm'
-
 import PostFilter from './components/PostFilter'
+import MyModal from './components/UI/modal/MyModal'
+import MyButton from './components/UI/button/MyButton'
 
 function App() {
   const [posts, setPosts] = useState([
@@ -13,6 +14,8 @@ function App() {
   ])
 
   const [filter, setFilter] = useState({ sort: '', query: '' })
+
+  const [modal, setModal] = useState(false)
 
   //сортировка (usememo отрабатывает только в тех случаях, если изменились зависимости)
   const sortedPosts = useMemo(() => {
@@ -35,6 +38,7 @@ function App() {
   //Создание поста
   const createPost = (newPost) => {
     setPosts([...posts, newPost])
+    setModal(false)
   }
 
   //удаление поста
@@ -44,18 +48,20 @@ function App() {
 
   return (
     <div className='App'>
-      <PostForm create={createPost} />
+      <MyButton style={{ marginTop: '30px' }} onClick={() => setModal(true)}>
+        Создать пользователя
+      </MyButton>
+      <MyModal visible={modal} setVisible={setModal}>
+        <PostForm create={createPost} />
+      </MyModal>
+
       <hr style={{ margin: '15px 0px' }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-      {sortedAndSearchedPosts.length !== 0 ? (
-        <PostList
-          remove={removePost}
-          posts={sortedAndSearchedPosts}
-          title='Посты про JS1'
-        />
-      ) : (
-        <h1 style={{ textAlign: 'center' }}>Посты не найдены</h1>
-      )}
+      <PostList
+        remove={removePost}
+        posts={sortedAndSearchedPosts}
+        title='Посты про JS'
+      />
     </div>
   )
 }

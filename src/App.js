@@ -1,4 +1,5 @@
 import './styles/App.css'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import PostList from './components/PostList'
 import PostForm from './components/PostForm'
@@ -6,17 +7,25 @@ import PostFilter from './components/PostFilter'
 import MyModal from './components/UI/modal/MyModal'
 import MyButton from './components/UI/button/MyButton'
 import { usePosts } from './hooks/usePosts'
+import PostService from './API/PostService'
+import Loader from './components/UI/Loader/Loader'
+import { useFetching } from './hooks/useFetching'
+
 
 function App() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: 'По названию', body: 'ффффффф' },
-    { id: 2, title: 'аголовок 2', body: 'ббббббб' },
-    { id: 3, title: 'Заголовок 3', body: 'ааааааа' },
-  ])
-
+  const [posts, setPosts] = useState([])
   const [filter, setFilter] = useState({ sort: '', query: '' })
   const [modal, setModal] = useState(false)
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+    const posts = await PostService.getAll()
+    setPosts(posts)
+  })
+
+  useEffect(() => {
+   fetchPosts()
+  }, [])
+
 
   //Создание поста
   const createPost = (newPost) => {
@@ -31,6 +40,7 @@ function App() {
 
   return (
     <div className='App'>
+      <button onClick={fetchPosts}>Кнопка</button>
       <MyButton style={{ marginTop: '30px' }} onClick={() => setModal(true)}>
         Создать пользователя
       </MyButton>
@@ -40,11 +50,18 @@ function App() {
 
       <hr style={{ margin: '15px 0px' }} />
       <PostFilter filter={filter} setFilter={setFilter} />
-      <PostList
-        remove={removePost}
-        posts={sortedAndSearchedPosts}
-        title='Посты про JS'
-      />
+
+      {postError && 
+         <h1>Произошла ошибка ${postError}</h1> }
+      {isPostsLoading 
+      ? <div style={{display:'flex', justifyContent:'center', marginTop:'50px'}}><Loader/></div>
+      : <PostList
+      remove={removePost}
+      posts={sortedAndSearchedPosts}
+      title='Посты про JS'
+    />
+      }
+      
     </div>
   )
 }

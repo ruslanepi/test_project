@@ -12,35 +12,28 @@ import Loader from './components/UI/Loader/Loader'
 import { useFetching } from './hooks/useFetching'
 import { getPagesArray, getPagesCount } from './components/utils/pages'
 
-
 function App() {
   const [posts, setPosts] = useState([])
   const [filter, setFilter] = useState({ sort: '', query: '' })
   const [modal, setModal] = useState(false)
   const [totalPages, setTotalPages] = useState(0)
   const [limit, setLimit] = useState(10)
-  const [page, setPage] = useState(1) 
+  const [page, setPage] = useState(1)
   const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
-  
-  
-  
+
   let pagesArray = getPagesArray(totalPages)
   console.log(pagesArray)
-  
+
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
     const response = await PostService.getAll(limit, page)
     setPosts(response.data)
-    const totalCount = response.headers['x-total-count'];
+    const totalCount = response.headers['x-total-count']
     setTotalPages(getPagesCount(totalCount, limit))
-   
   })
 
-  
-
   useEffect(() => {
-   fetchPosts()
+    fetchPosts()
   }, [])
-
 
   //Создание поста
   const createPost = (newPost) => {
@@ -66,18 +59,30 @@ function App() {
       <hr style={{ margin: '15px 0px' }} />
       <PostFilter filter={filter} setFilter={setFilter} />
 
-      {postError && 
-         <h1>Произошла ошибка ${postError}</h1> }
-      {isPostsLoading 
-      ? <div style={{display:'flex', justifyContent:'center', marginTop:'50px'}}><Loader/></div>
-      : <PostList
-      remove={removePost}
-      posts={sortedAndSearchedPosts}
-      title='Посты про JS'
-    />
-      }
+      {postError && <h1>Произошла ошибка ${postError}</h1>}
+      {isPostsLoading ? (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '50px',
+          }}
+        >
+          <Loader />
+        </div>
+      ) : (
+        <PostList
+          remove={removePost}
+          posts={sortedAndSearchedPosts}
+          title='Посты про JS'
+        />
+      )}
       <div className='page-wrapper'>
-      {pagesArray.map(p => <span className={page === p ? 'page page--current' : 'page '}>{p}</span> )}
+        {pagesArray.map((p) => (
+          <span className={page === p ? 'page page--current' : 'page '}>
+            {p}
+          </span>
+        ))}
       </div>
     </div>
   )

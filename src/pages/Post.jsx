@@ -39,7 +39,7 @@ const Post = () => {
       ) : (
         <div>
           {comments.map((comm) => (
-            <div style={{ marginBottom: '15px' }}>
+            <div key={comm.id} style={{ marginBottom: '15px' }}>
               <h5>{comm.email}</h5>
               <div>{comm.body}</div>
             </div>

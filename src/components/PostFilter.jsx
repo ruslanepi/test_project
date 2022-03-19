@@ -12,7 +12,9 @@ const PostFilter = ({ filter, setFilter }) => {
       />
       <MySelect
         value={filter.sort}
-        change={(selectedSort) => setFilter({ ...filter, sort: selectedSort })}
+        onChange={(selectedSort) =>
+          setFilter({ ...filter, sort: selectedSort })
+        }
         defaulValue='Сортировка'
         options={[
           { value: 'title', name: 'По названию' },

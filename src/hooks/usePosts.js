@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 //сортировка (usememo отрабатывает только в тех случаях, если изменились зависимости)
 export const useSortedPosts = (posts, sort) => {
   const sortedPosts = useMemo(() => {
-    console.log('Функция отработала')
     if (sort) {
       return [...posts].sort((a, b) => a[sort].localeCompare(b[sort]))
     }

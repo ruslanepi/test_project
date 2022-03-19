@@ -4,7 +4,7 @@ const PostItem = ({ number, post, remove }) => {
   const { id, title, body } = post
 
   const navigate = useNavigate()
-  console.log(navigate)
+
   return (
     <div className='post'>
       <div className='post__content'>

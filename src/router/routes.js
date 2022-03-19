@@ -5,7 +5,7 @@ import Login from '../pages/Login'
 
 export const publicRoutes = [
   { path: '/login', component: <Login />, exact: true },
-  { path: '*', component: <Login />, exact: true },
+  { path: '*', component: <Login />, exact: false },
 ]
 
 export const privateRoutes = [

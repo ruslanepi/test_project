@@ -1,8 +1,8 @@
 import React from 'react'
 
-const MySelect = ({ options, defaulValue, value, change }) => {
+const MySelect = ({ options, defaulValue, value, onChange }) => {
   return (
-    <select value={value} onChange={(e) => change(e.target.value)}>
+    <select value={value} onChange={(e) => onChange(e.target.value)}>
       <option disabled value=''>
         {defaulValue}
       </option>

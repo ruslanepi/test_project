@@ -23,6 +23,11 @@
   align-items: center;
 }
 
+.post-btns {
+  display: flex;
+  flex-direction: row;
+}
+
 .post-enter {
   transform: translateX(-350px);
 }
